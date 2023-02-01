@@ -12,7 +12,7 @@ def remove_space(input):
     removed_space = ""
     # removed_space akan berisi kalimat input tanpa spasi
     for i in input:
-        if i != " ":
+        if i in alphabet_list_i or i in alphabet_list_j:
             removed_space += i 
     return removed_space
 
