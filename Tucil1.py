@@ -51,7 +51,7 @@ def vigenereExtendedEncrypt(plain, key: bytes):
             result += plain[i]    
     return result
 
-def vigenereExtendedEncrypt(plain, key: bytes):
+def vigenereExtendedDecrypt(plain, key: bytes):
     result = ""
 
     for i in range(len(plain)):
