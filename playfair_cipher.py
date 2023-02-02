@@ -1,4 +1,4 @@
-# Playfair Cypher
+# Playfair Cipher
 
 # Dalam list alfabet ini dibuang huruf 'j' agar terdapat 25 huruf
 alphabet_list_j = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k', 'l', 'm',
@@ -98,6 +98,7 @@ def Playfair_Cipher_Encrypt(encryption_matrix,input):
 
         grouped_encrypted_cipher = encrypted_first_letter + encrypted_second_letter
         Encrypted_Text.append(grouped_encrypted_cipher)
+    # Menambahkan huruf j di akhir ciphertext agar dapat diketahui list alphabet mana yang perlu dipakai pada dekripsi
     for i in range(len(input)):
         if ("j" in input[i][0] or "j" in input[i][1]):
             Encrypted_Text.append("j")
@@ -156,27 +157,4 @@ def Playfair_Cipher_Decrypt(encrypted_text, key):
         grouped_decrypted_cipher = decrypted_first_letter + decrypted_second_letter
         Decrypted_Text.append(grouped_decrypted_cipher)
     return Decrypted_Text
-
-# main
-user_input = input("Masukkan teks yang akan dienkripsi:")
-key = input("Masukkan kunci enkripsi:").lower()
-removed_space_input = remove_space(user_input.lower())
-grouped_input = group_fill(removed_space_input)
-if ("j" in user_input or "j" in key):
-    encryption_table = generate_encryption_key_matrix(key,alphabet_list_i)
-else:
-    encryption_table = generate_encryption_key_matrix(key,alphabet_list_j)
-encrypted_text_array = Playfair_Cipher_Encrypt(encryption_table,grouped_input)
-encrypted_text = ''
-for i in range(len(encrypted_text_array)):
-    encrypted_text += encrypted_text_array[i]
-print("Plain Text: " + user_input)
-print("Encryption Key: " + key)
-print("Encrypted Text: " + encrypted_text)
-
-decrypted_text_array = Playfair_Cipher_Decrypt(encrypted_text,key)
-decrypted_text = ''
-for i in range(len(decrypted_text_array)):
-    decrypted_text += decrypted_text_array[i]
-print("Decrypted Text: " + decrypted_text)
-
+    
