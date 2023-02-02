@@ -28,7 +28,7 @@ def VigenereStandardEncrypt(plainText: str, key: str) -> str:
     for i in range(len(newPlainText)):
         cipherText = ((ord(newPlainText[i]) + ord(newKey[i])) % 26) + ord('A')
         result.append(chr(cipherText))
-    return print("".join(result))
+    return result
 
 def VigenereStandardDecrpyt(plainText: str, key: str) -> str:
     # Hanya mengambil 26 huruf alfabet 
@@ -60,7 +60,7 @@ def VigenereStandardDecrpyt(plainText: str, key: str) -> str:
         origText = ((ord(plainText[i]) - ord(newKey[i]) + 26) % 26) + ord('A') # Ditambah 26 sebelum di modulo karena modulo negative numbers in Python kind of works differently
         result.append(chr(origText))
 
-    return print("".join(result))
+    return result
 
 # Extended Vigenere Cipher: Auto-key (256 karakter ASCII)
 def vigenereExtendedEncrypt(plain, key: bytes):
@@ -72,7 +72,7 @@ def vigenereExtendedEncrypt(plain, key: bytes):
             result += chr(cipherText)
         else:
             result += plain[i]    
-    return print(result)
+    return result
 
 def vigenereExtendedDecrypt(plain, key: bytes):
     result = ""
@@ -83,15 +83,16 @@ def vigenereExtendedDecrypt(plain, key: bytes):
             result += chr(origText)
         else:
             result += plain[i]    
-    return print(result) 
+    return result
 
 
 # Input from keyboard
-plainText, key= input(), input()
-# VigenereStandardEncrypt(plainText, key) Works
+# plainText, key= input(), input()
+# text = VigenereStandardEncrypt(plainText, key) #Works
+# print(text)
 # VigenereStandardDecrpyt(plainText, key) Works
 # vigenereExtendedEncrypt(plainText, key)
-vigenereExtendedDecrypt(plainText, key)
+# vigenereExtendedDecrypt(plainText, key)
 
 # Input from file, read file (ex: .txt/word)
 

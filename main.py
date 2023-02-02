@@ -4,6 +4,7 @@ from tkinter import ttk
 from tkinter import messagebox
 
 from playfair_cipher import *
+from otp import *
 
 # Fungsi untuk start main menu
 def start_menu(menu_awal):
@@ -15,8 +16,9 @@ def start_menu(menu_awal):
     label=Label(menu, text="Pilih Jenis Cipher yang Ingin Digunakan", font=("Courier 22 bold"), wraplength=450)
     label.pack()
 
-    #Create a Button to validate Entry Widget
-    ttk.Button(menu, text= "Playfair Cipher",width= 20, command= lambda: playfair_cipher_window_start(menu)).pack()
+    #Setiap tombol mengarah ke menu masing-masing jenis cipher
+    ttk.Button(menu, text= "Playfair Cipher",width= 20, command= lambda: playfair_cipher_window_start(menu)).pack(pady=20)
+    ttk.Button(menu, text= "One Time Pad (OTP)",width= 20, command= lambda: otp_window_start(menu)).pack(pady=20)
 
 # Fungsi untuk setting geometry window tk
 def window_setting(menu):
@@ -78,14 +80,21 @@ def check_input(menu, input, cipher_type):
         elif (cipher_type == 'playfair_enkripsi'):
             playfair_cipher_enkripsi(menu,input)
         elif (cipher_type == 'playfair_dekripsi'):
-              playfair_cipher_dekripsi(menu,input)
+            playfair_cipher_dekripsi(menu,input)
+        elif (cipher_type == 'otp'):
+            otp_menu(menu, input)
+        elif (cipher_type == 'otp_enkripsi'):
+            otp_enkripsi(menu, input)
+        elif (cipher_type == 'otp_dekripsi'):
+            otp_dekripsi(menu,input)
             # TAMBAH JENIS CIPHER LAIN
-
     # kalau input tidak valid
     else:
         messagebox.showinfo(title="Error", message="Pilihlah angka yang valid!")
         if (cipher_type == 'playfair'):
             playfair_cipher_window_start(menu) # TAMBAH JENIS CIPHER LAIN
+        elif (cipher_type == 'otp'):
+            otp_window_start(menu)
         
 # Menyimpan hasil ciphertext ke dalam file data.txt
 def save_text(menu, encrypted_text):
@@ -108,6 +117,12 @@ def show_encrypted_text(menu, text, key, cipher_type):
         encrypted_text = ''
         for i in range(len(encrypted_text_array)):
             encrypted_text += encrypted_text_array[i]
+    elif (cipher_type == 'otp'):
+        encrypted_text_array = VigenereStandardEncrypt(text,key)
+        encrypted_text = ''
+        for i in range(len(encrypted_text_array)):
+            encrypted_text += encrypted_text_array[i]
+        create_otp_file(key)
     # TAMBAH JENIS CIPHER LAIN
 
     # Di sini intinya udah harus ada encrypted_text dari setiap jenis cipher
@@ -129,6 +144,12 @@ def show_decrypted_text(menu, text, key, cipher_type):
         decrypted_text = ''
         for i in range(len(decrypted_text_array)):
             decrypted_text += decrypted_text_array[i]
+    if (cipher_type == 'otp'):
+        decrypted_text_array = VigenereStandardDecrpyt(text, key)
+        decrypted_text = ''
+        for i in range(len(decrypted_text_array)):
+            decrypted_text += decrypted_text_array[i]
+        delete_otp_file()
     # TAMBAH JENIS CIPHER LAIN
 
     # Di sini intinya udah harus ada decrypted_text dari setiap jenis cipher
@@ -157,7 +178,7 @@ def playfair_cipher_window_start(menu):
     menu_input.focus_set()
     menu_input.pack()
 
-    #CTombol untuk submit
+    # Tombol untuk submit
     button = ttk.Button(menu_playfair, text= "Submit",width= 20, command = lambda: check_input(menu_playfair, menu_input.get(), "playfair"))
     button.pack(pady=20)
 # Fungsi yang memunculkan window enkripsi/dekripsi tergantung input user
@@ -200,7 +221,6 @@ def playfair_cipher_menu(menu, menu_input):
 def playfair_cipher_enkripsi(menu, input_type):
     if (input_type == '1'):
         menu_enkripsi_1 = Tk()
-        menu_enkripsi_1.geometry("500x500")
         window_setting(menu_enkripsi_1)
         menu.destroy()
 
@@ -286,6 +306,116 @@ def playfair_cipher_dekripsi(menu, input_type):
         menu_input.pack()
 
         button = ttk.Button(menu_dekripsi_2, text= "Simpan",width= 20, command = lambda: show_decrypted_text(menu_dekripsi_2, text, menu_input.get().lower(), 'playfair'))
+        button.pack(pady=20)
+
+# Fungsi yang memunculkan window baru untuk OTP
+def otp_window_start(menu):
+    menu_otp = Tk()
+    menu.destroy()
+    window_setting(menu_otp)
+    # Teks
+    label=Label(menu_otp, text="Apa yang mau dilakukan? \n 1. Enkripsi Text \n 2. Dekripsi Text \n", font=("Courier 15 bold"))
+    label.pack()
+    # Entry widget untuk input user
+    menu_input= Entry(menu_otp, width= 5)
+    menu_input.focus_set()
+    menu_input.pack()
+
+    # Tombol untuk submit
+    button = ttk.Button(menu_otp, text= "Submit",width= 20, command = lambda: check_input(menu_otp, menu_input.get(), "otp"))
+    button.pack(pady=20)
+# Fungsi yang memunculkan window enkripsi/dekripsi tergantung input user
+def otp_menu(menu, menu_input):
+    # user pilih enkripsi playfair cipher
+    if (menu_input == '1'):
+        menu_enkripsi = Tk()
+        menu.destroy()
+        window_setting(menu_enkripsi)
+        # Teks
+        label=Label(menu_enkripsi, text="Lewat apa teks akan dienkripsi? \n 1. Ketik teks di terminal \n 2. Lewat file \n", font=("Courier 15 bold"), wraplength=450)
+        label.pack()
+
+        # Entry widget untuk input user
+        menu_input= Entry(menu_enkripsi, width= 5)
+        menu_input.focus_set()
+        menu_input.pack()
+
+        #CTombol untuk submit
+        button = ttk.Button(menu_enkripsi, text= "Submit",width= 20, command = lambda: check_input(menu_enkripsi, menu_input.get(), "otp_enkripsi"))
+        button.pack(pady=20)
+    # user pilih dekripsi playfair cipher
+    else:
+        menu_dekripsi = Tk()
+        window_setting(menu_dekripsi)
+        menu.destroy()
+        # Teks
+        label=Label(menu_dekripsi, text="Lewat apa teks akan didekripsi? \n 1. Ketik teks di terminal \n 2. Lewat file \n", font=("Courier 15 bold"), wraplength=450)
+        label.pack()
+
+        # Entry widget untuk input user
+        menu_input= Entry(menu_dekripsi, width= 5)
+        menu_input.focus_set()
+        menu_input.pack()
+
+        #CTombol untuk submit
+        button = ttk.Button(menu_dekripsi, text= "Submit",width= 20, command = lambda: check_input(menu_dekripsi, menu_input.get(), "otp_dekripsi"))
+        button.pack(pady=20)
+# Fungsi enkripsi otp (pakai Vigenere Standard Encrypt)
+def otp_enkripsi(menu, input_type):
+    if (input_type == '1'):
+        menu_enkripsi_1 = Tk()
+        window_setting(menu_enkripsi_1)
+        menu.destroy()
+
+        # Input Teks
+        label=Label(menu_enkripsi_1, text="Masukkan teks yang akan dienkripsi: ", font=("Courier 15 bold"))
+        label.pack()
+        # Entry widget untuk input user
+        menu_input_teks= Entry(menu_enkripsi_1, width= 30)
+        menu_input_teks.focus_set()
+        menu_input_teks.pack()
+        
+        button = ttk.Button(menu_enkripsi_1, text= "Simpan",width= 20, command = lambda: show_encrypted_text(menu_enkripsi_1, menu_input_teks.get().lower(), create_otp_key(menu_input_teks.get().lower()).lower(), 'otp'))
+        button.pack(pady=20)
+
+        # Teks
+
+    else:
+        text = open_file()
+        while (text == ''):
+            print("Jangan di cancel dong :(")
+            text = open_file()
+        menu_enkripsi_2 = Tk()
+        window_setting(menu_enkripsi_2)
+        menu.destroy()
+        show_encrypted_text(menu_enkripsi_2, text, create_otp_key(text), 'otp')
+# Fungsi dekripsi otp (pakai Vigenere Standard Decrypt)
+def otp_dekripsi(menu, input_type):
+    if (input_type == '1'):
+        menu_dekripsi_1 = Tk()
+        window_setting(menu_dekripsi_1)
+        menu.destroy()
+
+        # Input Teks
+        label=Label(menu_dekripsi_1, text="Masukkan teks yang akan didekripsi: ", font=("Courier 15 bold"))
+        label.pack()
+        # Entry widget untuk input user
+        menu_input_teks= Entry(menu_dekripsi_1, width= 30)
+        menu_input_teks.pack()
+
+        button = ttk.Button(menu_dekripsi_1, text= "Pilih File Kode OTP2",width= 20, command = lambda : show_decrypted_text(menu_dekripsi_1, menu_input_teks.get().lower(), open_file().lower(), 'otp'))
+        button.pack(pady=20)
+
+    else:
+        text = open_file()
+        while (text == ''):
+            print("Jangan di cancel dong :(")
+            text = open_file()
+        menu_dekripsi_2 = Tk()
+        window_setting(menu_dekripsi_2)
+        menu.destroy()
+
+        button = ttk.Button(menu_dekripsi_2, text= "Pilih File Kode OTP",width= 20, command = lambda: show_decrypted_text(menu_dekripsi_2, text, open_file().lower(), 'otp'))
         button.pack(pady=20)
 
 # Start
