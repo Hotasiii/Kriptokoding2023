@@ -48,6 +48,7 @@ def open_file():
 
 # Check input dari user, keluarkan alert message box jika input tidak valid
 def check_input(menu, input, cipher_type):
+    # Kalau input valid
     if (input == '1' or input == '2'):
         if (cipher_type == 'playfair'):
             playfair_cipher_menu(menu, input)
@@ -57,10 +58,12 @@ def check_input(menu, input, cipher_type):
             playfair_cipher_dekripsi(menu,input)
         # TAMBAH JENIS CIPHER LAIN
 
+    # kalau input tidak valid
     else:
         messagebox.showinfo(title="Error", message="Pilihlah angka yang valid!")
         if (cipher_type == 'playfair'):
             playfair_cipher_window_start(menu)
+        # TAMBAH JENIS CIPHER LAIn
         
 # Menyimpan hasil ciphertext ke dalam file data.txt
 def save_text(menu, encrypted_text):
