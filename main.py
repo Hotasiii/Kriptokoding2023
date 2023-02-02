@@ -56,14 +56,13 @@ def check_input(menu, input, cipher_type):
             playfair_cipher_enkripsi(menu,input)
         elif (cipher_type == 'playfair_dekripsi'):
             playfair_cipher_dekripsi(menu,input)
-        # TAMBAH JENIS CIPHER LAIN
+            # TAMBAH JENIS CIPHER LAIN
 
     # kalau input tidak valid
     else:
         messagebox.showinfo(title="Error", message="Pilihlah angka yang valid!")
         if (cipher_type == 'playfair'):
-            playfair_cipher_window_start(menu)
-        # TAMBAH JENIS CIPHER LAIn
+            playfair_cipher_window_start(menu) # TAMBAH JENIS CIPHER LAIN
         
 # Menyimpan hasil ciphertext ke dalam file data.txt
 def save_text(menu, encrypted_text):
@@ -174,7 +173,7 @@ def playfair_cipher_menu(menu, menu_input):
         #CTombol untuk submit
         button = ttk.Button(menu_dekripsi, text= "Submit",width= 20, command = lambda: check_input(menu_dekripsi, menu_input.get(), "playfair_dekripsi"))
         button.pack(pady=20)
-# Fungsi untuk enkripsi playfair
+# Fungsi enkripsi playfair
 def playfair_cipher_enkripsi(menu, input_type):
     if (input_type == '1'):
         menu_enkripsi_1 = Tk()
@@ -221,7 +220,7 @@ def playfair_cipher_enkripsi(menu, input_type):
 
         button = ttk.Button(menu_enkripsi_2, text= "Simpan",width= 20, command = lambda: show_encrypted_text(menu_enkripsi_2, text, menu_input.get().lower(), 'playfair'))
         button.pack(pady=20)
-# Fungsi untuk dekripsi playfair
+# Fungsi dekripsi playfair
 def playfair_cipher_dekripsi(menu, input_type):
     if (input_type == '1'):
         menu_dekripsi_1 = Tk()
