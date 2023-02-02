@@ -20,8 +20,8 @@ def start_menu(menu_awal):
 
 # Fungsi untuk setting geometry window tk
 def window_setting(menu):
-    w = 600 # Lebar window menu
-    h = 300 # Tinggu window menu
+    w = 700 # Lebar window menu
+    h = 500 # Tinggu window menu
 
     # get screen width and height
     ws = menu.winfo_screenwidth() # lebar layar
@@ -34,6 +34,16 @@ def window_setting(menu):
     # Letak window menu di tengah layar
     menu.geometry('%dx%d+%d+%d' % (w, h, x, y))
 
+# Fungsi untuk konversi angka biner ke bentuk decimal
+def Binary_to_Decimal(binary):
+    decimal, i = 0, 0 
+    while(binary != 0):
+        temp = binary % 10
+        decimal = decimal + temp * pow(2, i)
+        binary = binary//10
+        i += 1
+    return (decimal)   
+
 # Fungsi untuk membuka file
 def open_file():
     file_path = filedialog.askopenfilename(title="Open a Text File", filetypes=(("text    files","*.txt"), ("all files","*.*")))
@@ -41,10 +51,23 @@ def open_file():
     if (file_path == ''):
         return ''
     else:
-        file = open(file_path,'r')
-        text = file.read()
-        file.close()
-        return text
+        # Jika file yang disubmit adalah file biner
+        if (file_path[-3:] == 'bin'):
+            file = open(file_path,'r')
+            bin_text = file.read()
+            file.close()
+            string_text = ''
+            # Mengonversi data biner ke bentuk decimal, lalu ke string
+            for i in range(0, len(bin_text), 7):
+                temp = int(bin_text[i:i + 7])
+                decimal = Binary_to_Decimal(temp)
+                string_text += chr(decimal)
+            return string_text
+        else:
+            file = open(file_path,'r')
+            text = file.read()
+            file.close()
+            return text
 
 # Check input dari user, keluarkan alert message box jika input tidak valid
 def check_input(menu, input, cipher_type):
@@ -55,7 +78,7 @@ def check_input(menu, input, cipher_type):
         elif (cipher_type == 'playfair_enkripsi'):
             playfair_cipher_enkripsi(menu,input)
         elif (cipher_type == 'playfair_dekripsi'):
-            playfair_cipher_dekripsi(menu,input)
+              playfair_cipher_dekripsi(menu,input)
             # TAMBAH JENIS CIPHER LAIN
 
     # kalau input tidak valid
