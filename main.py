@@ -468,9 +468,10 @@ def otp_dekripsi(menu, input_type):
         label.pack()
         # Entry widget untuk input user
         menu_input_teks= Entry(menu_dekripsi_1, width= 30)
+        menu_input_teks.focus_set()
         menu_input_teks.pack()
 
-        button = ttk.Button(menu_dekripsi_1, text= "Pilih File Kode OTP2",width= 20, command = lambda : show_decrypted_text(menu_dekripsi_1, menu_input_teks.get().lower(), open_file().lower(), 'otp'))
+        button = ttk.Button(menu_dekripsi_1, text= "Pilih File Kode OTP",width= 20, command = lambda : show_decrypted_text(menu_dekripsi_1, menu_input_teks.get(), open_file().lower(), 'otp'))
         button.pack(pady=20)
 
     else:
