@@ -63,7 +63,7 @@ def VigenereStandardDecrpyt(plainText: str, key: str) -> str:
     return result
 
 # Extended Vigenere Cipher: Auto-key (256 karakter ASCII)
-def vigenereExtendedEncrypt(plain, key: bytes):
+def vigenereExtendedEncrypt(plain, key):
     result = ""
 
     for i in range(len(plain)):
@@ -74,7 +74,7 @@ def vigenereExtendedEncrypt(plain, key: bytes):
             result += plain[i]    
     return result
 
-def vigenereExtendedDecrypt(plain, key: bytes):
+def vigenereExtendedDecrypt(plain, key):
     result = ""
 
     for i in range(len(plain)):

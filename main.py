@@ -26,7 +26,7 @@ def start_menu(menu_awal):
 # Fungsi untuk setting geometry window tk
 def window_setting(menu):
     w = 700 # Lebar window menu
-    h = 500 # Tinggu window menu
+    h = 700 # Tinggu window menu
 
     # get screen width and height
     ws = menu.winfo_screenwidth() # lebar layar
@@ -49,6 +49,29 @@ def Binary_to_Decimal(binary):
         i += 1
     return (decimal)   
 
+# Fungsi untuk menampilkan cipherteks/plainteks sebagai satu string
+def whole_text_show(menu, text):
+    label=Label(menu, text="Converted Text: " + text, font=("Courier 12 bold"), wraplength= 450)
+    label.pack(pady=20)
+    save_prompt(menu, text)
+
+# Fungsi untuk menampilkan cipherteks/plainteks per 5 huruf
+def five_characters_show(menu, text):
+    if (len(text) < 5):
+        whole_text_show(menu,text)
+    else:
+        spaced_text = ''
+        original_text = text
+        i = 0
+        while (i < len(original_text)):
+            spaced_text += text[:5]
+            spaced_text += ' '
+            text = text[5:]
+            i += 5
+        label=Label(menu, text="Converted Text: " + spaced_text, font=("Courier 12 bold"), wraplength= 450)
+        label.pack(pady=20)
+        save_prompt(menu, spaced_text)
+
 # Fungsi untuk membuka file
 def open_file():
     file_path = filedialog.askopenfilename(title="Open a Text File", filetypes=(("text    files","*.txt"), ("all files","*.*")))
@@ -58,7 +81,7 @@ def open_file():
     else:
         # Jika file yang disubmit adalah file biner
         if (file_path[-3:] == 'bin'):
-            file = open(file_path,'r')
+            file = open(file_path,'r', encoding="utf-8")
             bin_text = file.read()
             file.close()
             string_text = ''
@@ -69,7 +92,7 @@ def open_file():
                 string_text += chr(decimal)
             return string_text
         else:
-            file = open(file_path,'r')
+            file = open(file_path,'r', encoding="utf-8")
             text = file.read()
             file.close()
             return text
@@ -117,11 +140,22 @@ def check_input(menu, input, cipher_type):
         
 # Menyimpan hasil ciphertext ke dalam file data.txt
 def save_text(menu, encrypted_text):
-    text_file = open("./Data.txt", "w")
+    text_file = open("./Data.txt", "w", encoding="utf-8")
     text_file.write(encrypted_text)
     text_file.close()
-    messagebox.showinfo(title="Saved", message="Ciphertext berhasil disimpan")
+    messagebox.showinfo(title="Saved", message="Hasil berhasil disimpan dalam Data.txt")
     start_menu(menu)
+
+# Fungsi yang menampilkan opsi untku simpan teks dalam file eksternal
+def save_prompt(menu, text):
+    label=Label(menu, text="Simpan hasil dalam file eksternal?", font=("Courier 16 bold"), wraplength=450)
+    label.pack(pady=20)
+
+    button = ttk.Button(menu, text= "Simpan",width= 20, command = lambda: save_text(menu, text))
+    button.pack(pady=20)
+
+    button = ttk.Button(menu, text= "Tidak Simpan",width= 20, command = lambda: start_menu(menu))
+    button.pack(pady=20)
 
 # Fungsi untuk menapilkan teks dari input pada GUI 
 def show_encrypted_text(menu, text, key, cipher_type):
@@ -154,17 +188,14 @@ def show_encrypted_text(menu, text, key, cipher_type):
             encrypted_text += encrypted_text_array[i]
 
     # Di sini intinya udah harus ada encrypted_text dari setiap jenis cipher
-    label=Label(menu, text="Ciphertext: " + encrypted_text, font=("Courier 22 bold"), wraplength= 450)
+    label=Label(menu, text="Bagimana cipherteks ditampilkan?", font=("Courier 16 bold"), wraplength=450)
     label.pack(pady=20)
 
-    label=Label(menu, text="Simpan ciphertext dalam file eksternal?", font=("Courier 16 bold"), wraplength=450)
-    label.pack(pady=20)
+    button = ttk.Button(menu, text= "Tampilkan dalam satu kalimat panjang",width= 50, command = lambda: whole_text_show(menu, encrypted_text))
+    button.pack(pady=20, padx= 20)
 
-    button = ttk.Button(menu, text= "Simpan",width= 20, command = lambda: save_text(menu, encrypted_text))
-    button.pack(pady=20)
-
-    button = ttk.Button(menu, text= "Tidak Simpan",width= 20, command = lambda: start_menu(menu))
-    button.pack(pady=20)
+    button = ttk.Button(menu, text= "Tampilkan per 5 karakter",width= 50, command = lambda: five_characters_show(menu, encrypted_text))
+    button.pack(pady=20, padx= 20)
 
 def show_decrypted_text(menu, text, key, cipher_type):
     if (cipher_type == 'playfair'):
@@ -191,17 +222,14 @@ def show_decrypted_text(menu, text, key, cipher_type):
     
 
     # Di sini intinya udah harus ada decrypted_text dari setiap jenis cipher
-    label=Label(menu, text="Plaintext: " + decrypted_text, font=("Courier 22 bold"), wraplength= 450)
+    label=Label(menu, text="Bagimana plainteks ditampilkan?", font=("Courier 16 bold"), wraplength=450)
     label.pack(pady=20)
 
-    label=Label(menu, text="Simpan plaintext dalam file eksternal?", font=("Courier 16 bold"), wraplength=450)
-    label.pack(pady=20)
+    button = ttk.Button(menu, text= "Tampilkan dalam satu kalimat panjang",width= 50, command = lambda: whole_text_show(menu, decrypted_text))
+    button.pack(pady=20, padx= 20)
 
-    button = ttk.Button(menu, text= "Simpan",width= 20, command = lambda: save_text(menu, decrypted_text))
-    button.pack(pady=20)
-
-    button = ttk.Button(menu, text= "Tidak Simpan",width= 20, command = lambda: start_menu(menu))
-    button.pack(pady=20)
+    button = ttk.Button(menu, text= "Tampilkan per 5 karakter",width= 50, command = lambda: five_characters_show(menu, decrypted_text))
+    button.pack(pady=20, padx= 20)
 
 # Fungsi yang memunculkan window baru untuk playfair cipher
 def playfair_cipher_window_start(menu):
