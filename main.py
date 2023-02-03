@@ -705,7 +705,7 @@ def extended_vigenere_enkripsi(menu, input_type):
         button = ttk.Button(menu_enkripsi_2, text= "Simpan",width= 20, command = lambda: show_encrypted_text(menu_enkripsi_2, text, menu_input.get(), 'extended_vigenere'))
         button.pack(pady=20)
 
-# Fungsi dekripsi vigenere standard
+# Fungsi dekripsi extended vigenere 
 def extended_vigenere_dekripsi(menu, input_type):
     if (input_type == '1'):
         menu_dekripsi_1 = Tk()
