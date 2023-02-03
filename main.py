@@ -5,6 +5,7 @@ from tkinter import messagebox
 
 from playfair_cipher import *
 from otp import *
+from Tucil1 import *
 
 # Fungsi untuk start main menu
 def start_menu(menu_awal):
@@ -19,6 +20,8 @@ def start_menu(menu_awal):
     #Setiap tombol mengarah ke menu masing-masing jenis cipher
     ttk.Button(menu, text= "Playfair Cipher",width= 20, command= lambda: playfair_cipher_window_start(menu)).pack(pady=20)
     ttk.Button(menu, text= "One Time Pad (OTP)",width= 20, command= lambda: otp_window_start(menu)).pack(pady=20)
+    ttk.Button(menu, text= "Vigenere Standard Cipher",width= 20, command= lambda: vigenere_standard_window_start(menu)).pack(pady=20)
+    ttk.Button(menu, text= "Extended Vigenere Cipher",width= 20, command= lambda: extended_vigenere_window_start(menu)).pack(pady=20)
 
 # Fungsi untuk setting geometry window tk
 def window_setting(menu):
@@ -87,7 +90,19 @@ def check_input(menu, input, cipher_type):
             otp_enkripsi(menu, input)
         elif (cipher_type == 'otp_dekripsi'):
             otp_dekripsi(menu,input)
-            # TAMBAH JENIS CIPHER LAIN
+        elif (cipher_type == 'vigenere_standard'):
+            vigenere_standard_menu(menu, input)
+        elif (cipher_type == 'vigenere_standard_enkripsi'):
+            vigenere_standard_enkripsi(menu, input)
+        elif (cipher_type == 'vigenere_standard_dekripsi'):
+            vigenere_standard_dekripsi(menu, input)
+        elif (cipher_type == 'extended_vigenere'):
+            extended_vigenere_menu(menu, input)
+        elif (cipher_type == 'extended_vigenere_enkripsi'):
+            extended_vigenere_enkripsi(menu, input)
+        elif (cipher_type == 'extended_vigenere_dekripsi'):
+            extended_vigenere_dekripsi(menu, input)
+    
     # kalau input tidak valid
     else:
         messagebox.showinfo(title="Error", message="Pilihlah angka yang valid!")
@@ -95,6 +110,10 @@ def check_input(menu, input, cipher_type):
             playfair_cipher_window_start(menu) # TAMBAH JENIS CIPHER LAIN
         elif (cipher_type == 'otp'):
             otp_window_start(menu)
+        elif (cipher_type == 'vigenere_standard'):
+            vigenere_standard_window_start(menu)
+        elif (cipher_type == 'extended_vigenere'):
+            extended_vigenere_window_start(menu)
         
 # Menyimpan hasil ciphertext ke dalam file data.txt
 def save_text(menu, encrypted_text):
@@ -123,7 +142,16 @@ def show_encrypted_text(menu, text, key, cipher_type):
         for i in range(len(encrypted_text_array)):
             encrypted_text += encrypted_text_array[i]
         create_otp_file(key)
-    # TAMBAH JENIS CIPHER LAIN
+    elif (cipher_type == 'vigenere_standard'):
+        encrypted_text_array = VigenereStandardEncrypt(text, key)
+        encrypted_text = ''
+        for i in range(len(encrypted_text_array)):
+            encrypted_text += encrypted_text_array[i]
+    elif (cipher_type == 'extended_vigenere'):
+        encrypted_text_array = vigenereExtendedEncrypt(text, key)
+        encrypted_text = ''
+        for i in range(len(encrypted_text_array)):
+            encrypted_text += encrypted_text_array[i]
 
     # Di sini intinya udah harus ada encrypted_text dari setiap jenis cipher
     label=Label(menu, text="Ciphertext: " + encrypted_text, font=("Courier 22 bold"), wraplength= 450)
@@ -150,7 +178,17 @@ def show_decrypted_text(menu, text, key, cipher_type):
         for i in range(len(decrypted_text_array)):
             decrypted_text += decrypted_text_array[i]
         delete_otp_file()
-    # TAMBAH JENIS CIPHER LAIN
+    if (cipher_type == 'vigenere_standard'):
+        decrypted_text_array = VigenereStandardDecrpyt(text, key)
+        decrypted_text = ''
+        for i in range(len(decrypted_text_array)):
+            decrypted_text += decrypted_text_array[i]
+    if (cipher_type == 'extended_vigenere'):
+        decrypted_text_array = vigenereExtendedDecrypt(text, key)
+        decrypted_text = ''
+        for i in range(len(decrypted_text_array)):
+            decrypted_text += decrypted_text_array[i]
+    
 
     # Di sini intinya udah harus ada decrypted_text dari setiap jenis cipher
     label=Label(menu, text="Plaintext: " + decrypted_text, font=("Courier 22 bold"), wraplength= 450)
@@ -217,6 +255,7 @@ def playfair_cipher_menu(menu, menu_input):
         #CTombol untuk submit
         button = ttk.Button(menu_dekripsi, text= "Submit",width= 20, command = lambda: check_input(menu_dekripsi, menu_input.get(), "playfair_dekripsi"))
         button.pack(pady=20)
+
 # Fungsi enkripsi playfair
 def playfair_cipher_enkripsi(menu, input_type):
     if (input_type == '1'):
@@ -416,6 +455,299 @@ def otp_dekripsi(menu, input_type):
         menu.destroy()
 
         button = ttk.Button(menu_dekripsi_2, text= "Pilih File Kode OTP",width= 20, command = lambda: show_decrypted_text(menu_dekripsi_2, text, open_file().lower(), 'otp'))
+        button.pack(pady=20)
+
+# Fungsi yang memunculkan window baru untuk Vigenere Standard Cipher
+def vigenere_standard_window_start(menu):
+    menu_vigenere_standard = Tk()
+    menu.destroy()
+    window_setting(menu_vigenere_standard)
+    # Teks
+    label=Label(menu_vigenere_standard, text="Apa yang mau dilakukan? \n 1. Enkripsi Text \n 2. Dekripsi Text \n", font=("Courier 15 bold"))
+    label.pack()
+    # Entry widget untuk input user
+    menu_input= Entry(menu_vigenere_standard, width= 5)
+    menu_input.focus_set()
+    menu_input.pack()
+
+    # Tombol untuk submit
+    button = ttk.Button(menu_vigenere_standard, text= "Submit",width= 20, command = lambda: check_input(menu_vigenere_standard, menu_input.get(), "vigenere_standard"))
+    button.pack(pady=20)
+
+# Fungsi yang memunculkan window enkripsi/dekripsi tergantung input user
+def vigenere_standard_menu(menu, menu_input):
+    # user pilih enkripsi vigenere standard
+    if (menu_input == '1'):
+        menu_enkripsi = Tk()
+        menu.destroy()
+        window_setting(menu_enkripsi)
+        # Teks
+        label=Label(menu_enkripsi, text="Lewat apa teks akan dienkripsi? \n 1. Ketik teks di terminal \n 2. Lewat file \n", font=("Courier 15 bold"), wraplength=450)
+        label.pack()
+
+        # Entry widget untuk input user
+        menu_input= Entry(menu_enkripsi, width= 5)
+        menu_input.focus_set()
+        menu_input.pack()
+
+        #CTombol untuk submit
+        button = ttk.Button(menu_enkripsi, text= "Submit",width= 20, command = lambda: check_input(menu_enkripsi, menu_input.get(), "vigenere_standard_enkripsi"))
+        button.pack(pady=20)
+
+    # user pilih dekripsi vigenere standard
+    else:
+        menu_dekripsi = Tk()
+        window_setting(menu_dekripsi)
+        menu.destroy()
+        # Teks
+        label=Label(menu_dekripsi, text="Lewat apa teks akan didekripsi? \n 1. Ketik teks di terminal \n 2. Lewat file \n", font=("Courier 15 bold"), wraplength=450)
+        label.pack()
+
+        # Entry widget untuk input user
+        menu_input= Entry(menu_dekripsi, width= 5)
+        menu_input.focus_set()
+        menu_input.pack()
+
+        #CTombol untuk submit
+        button = ttk.Button(menu_dekripsi, text= "Submit",width= 20, command = lambda: check_input(menu_dekripsi, menu_input.get(), "vigenere_standard_dekripsi"))
+        button.pack(pady=20)
+
+# Fungsi enkripsi vigenere standard cypher
+def vigenere_standard_enkripsi(menu, input_type):
+    if (input_type == '1'):
+        menu_enkripsi_1 = Tk()
+        window_setting(menu_enkripsi_1)
+        menu.destroy()
+
+        # Input Teks
+        label=Label(menu_enkripsi_1, text="Masukkan teks yang akan dienkripsi: ", font=("Courier 15 bold"))
+        label.pack()
+        # Entry widget untuk input user
+        menu_input_teks= Entry(menu_enkripsi_1, width= 30)
+        menu_input_teks.focus_set()
+        menu_input_teks.pack()
+
+        # Input Key
+        label=Label(menu_enkripsi_1, text="Masukkan kunci: ", font=("Courier 15 bold"))
+        label.pack()
+        # Entry widget untuk input user
+        menu_input_key= Entry(menu_enkripsi_1, width= 20)
+        menu_input_key.focus_set()
+        menu_input_key.pack()
+
+        button = ttk.Button(menu_enkripsi_1, text= "Simpan",width= 20, command = lambda: show_encrypted_text(menu_enkripsi_1, menu_input_teks.get(), menu_input_key.get(), 'vigenere_standard'))
+        button.pack(pady=20)
+
+    # Teks
+    else:
+        text = open_file()
+        while (text == ''):
+            print("Jangan di cancel dong :(")
+            text = open_file()
+        menu_enkripsi_2 = Tk()
+        window_setting(menu_enkripsi_2)
+        menu.destroy()
+
+        label=Label(menu_enkripsi_2, text="Masukkan kunci: ", font=("Courier 15 bold"))
+        label.pack()
+        # Entry widget untuk input user
+        menu_input= Entry(menu_enkripsi_2, width= 20)
+        menu_input.focus_set()
+        menu_input.pack()
+
+        button = ttk.Button(menu_enkripsi_2, text= "Simpan",width= 20, command = lambda: show_encrypted_text(menu_enkripsi_2, text, menu_input.get(), 'vigenere_standard'))
+        button.pack(pady=20)
+
+# Fungsi dekripsi vigenere standard
+def vigenere_standard_dekripsi(menu, input_type):
+    if (input_type == '1'):
+        menu_dekripsi_1 = Tk()
+        window_setting(menu_dekripsi_1)
+        menu.destroy()
+
+        # Input Teks
+        label=Label(menu_dekripsi_1, text="Masukkan teks yang akan didekripsi: ", font=("Courier 15 bold"))
+        label.pack()
+        # Entry widget untuk input user
+        menu_input_teks= Entry(menu_dekripsi_1, width= 30)
+        menu_input_teks.focus_set()
+        menu_input_teks.pack()
+
+        # Input Key
+        label=Label(menu_dekripsi_1, text="Masukkan kunci: ", font=("Courier 15 bold"))
+        label.pack()
+        # Entry widget untuk input user
+        menu_input_key= Entry(menu_dekripsi_1, width= 20)
+        menu_input_key.focus_set()
+        menu_input_key.pack()
+
+        button = ttk.Button(menu_dekripsi_1, text= "Simpan",width= 20, command = lambda: show_decrypted_text(menu_dekripsi_1, menu_input_teks.get(), menu_input_key.get(), 'vigenere_standard'))
+        button.pack(pady=20)
+
+    else:
+        text = open_file()
+        while (text == ''):
+            print("Jangan di cancel dong :(")
+            text = open_file()
+        menu_dekripsi_2 = Tk()
+        window_setting(menu_dekripsi_2)
+        menu.destroy()
+
+        label=Label(menu_dekripsi_2, text="Masukkan kunci: ", font=("Courier 15 bold"))
+        label.pack()
+        # Entry widget untuk input user
+        menu_input= Entry(menu_dekripsi_2, width= 20)
+        menu_input.focus_set()
+        menu_input.pack()
+
+        button = ttk.Button(menu_dekripsi_2, text= "Simpan",width= 20, command = lambda: show_decrypted_text(menu_dekripsi_2, text, menu_input.get(), 'vigenere_standard'))
+        button.pack(pady=20)
+
+
+# Fungsi yang memunculkan window baru untuk Extended Vigenere Cipher
+def extended_vigenere_window_start(menu):
+    menu_extended_vigenere = Tk()
+    menu.destroy()
+    window_setting(menu_extended_vigenere)
+    # Teks
+    label=Label(menu_extended_vigenere, text="Apa yang mau dilakukan? \n 1. Enkripsi Text \n 2. Dekripsi Text \n", font=("Courier 15 bold"))
+    label.pack()
+    # Entry widget untuk input user
+    menu_input= Entry(menu_extended_vigenere, width= 5)
+    menu_input.focus_set()
+    menu_input.pack()
+
+    # Tombol untuk submit
+    button = ttk.Button(menu_extended_vigenere, text= "Submit",width= 20, command = lambda: check_input(menu_extended_vigenere, menu_input.get(), "extended_vigenere"))
+    button.pack(pady=20)
+
+# Fungsi yang memunculkan window enkripsi/dekripsi tergantung input user
+def extended_vigenere_menu(menu, menu_input):
+    # user pilih enkripsi extended vigenere
+    if (menu_input == '1'):
+        menu_enkripsi = Tk()
+        menu.destroy()
+        window_setting(menu_enkripsi)
+        # Teks
+        label=Label(menu_enkripsi, text="Lewat apa teks akan dienkripsi? \n 1. Ketik teks di terminal \n 2. Lewat file \n", font=("Courier 15 bold"), wraplength=450)
+        label.pack()
+
+        # Entry widget untuk input user
+        menu_input= Entry(menu_enkripsi, width= 5)
+        menu_input.focus_set()
+        menu_input.pack()
+
+        #CTombol untuk submit
+        button = ttk.Button(menu_enkripsi, text= "Submit",width= 20, command = lambda: check_input(menu_enkripsi, menu_input.get(), "extended_vigenere_enkripsi"))
+        button.pack(pady=20)
+
+    # user pilih dekripsi extended vigenere
+    else:
+        menu_dekripsi = Tk()
+        window_setting(menu_dekripsi)
+        menu.destroy()
+        # Teks
+        label=Label(menu_dekripsi, text="Lewat apa teks akan didekripsi? \n 1. Ketik teks di terminal \n 2. Lewat file \n", font=("Courier 15 bold"), wraplength=450)
+        label.pack()
+
+        # Entry widget untuk input user
+        menu_input= Entry(menu_dekripsi, width= 5)
+        menu_input.focus_set()
+        menu_input.pack()
+
+        #CTombol untuk submit
+        button = ttk.Button(menu_dekripsi, text= "Submit",width= 20, command = lambda: check_input(menu_dekripsi, menu_input.get(), "extended_vigenere_dekripsi"))
+        button.pack(pady=20)
+
+# Fungsi enkripsi extended vigenere
+def extended_vigenere_enkripsi(menu, input_type):
+    if (input_type == '1'):
+        menu_enkripsi_1 = Tk()
+        window_setting(menu_enkripsi_1)
+        menu.destroy()
+
+        # Input Teks
+        label=Label(menu_enkripsi_1, text="Masukkan teks yang akan dienkripsi: ", font=("Courier 15 bold"))
+        label.pack()
+        # Entry widget untuk input user
+        menu_input_teks= Entry(menu_enkripsi_1, width= 30)
+        menu_input_teks.focus_set()
+        menu_input_teks.pack()
+
+        # Input Key
+        label=Label(menu_enkripsi_1, text="Masukkan kunci: ", font=("Courier 15 bold"))
+        label.pack()
+        # Entry widget untuk input user
+        menu_input_key= Entry(menu_enkripsi_1, width= 20)
+        menu_input_key.focus_set()
+        menu_input_key.pack()
+
+        button = ttk.Button(menu_enkripsi_1, text= "Simpan",width= 20, command = lambda: show_encrypted_text(menu_enkripsi_1, menu_input_teks.get(), menu_input_key.get(), 'extended_vigenere'))
+        button.pack(pady=20)
+
+    # Teks
+    else:
+        text = open_file()
+        while (text == ''):
+            print("Jangan di cancel dong :(")
+            text = open_file()
+        menu_enkripsi_2 = Tk()
+        window_setting(menu_enkripsi_2)
+        menu.destroy()
+
+        label=Label(menu_enkripsi_2, text="Masukkan kunci: ", font=("Courier 15 bold"))
+        label.pack()
+        # Entry widget untuk input user
+        menu_input= Entry(menu_enkripsi_2, width= 20)
+        menu_input.focus_set()
+        menu_input.pack()
+
+        button = ttk.Button(menu_enkripsi_2, text= "Simpan",width= 20, command = lambda: show_encrypted_text(menu_enkripsi_2, text, menu_input.get(), 'extended_vigenere'))
+        button.pack(pady=20)
+
+# Fungsi dekripsi vigenere standard
+def extended_vigenere_dekripsi(menu, input_type):
+    if (input_type == '1'):
+        menu_dekripsi_1 = Tk()
+        window_setting(menu_dekripsi_1)
+        menu.destroy()
+
+        # Input Teks
+        label=Label(menu_dekripsi_1, text="Masukkan teks yang akan didekripsi: ", font=("Courier 15 bold"))
+        label.pack()
+        # Entry widget untuk input user
+        menu_input_teks= Entry(menu_dekripsi_1, width= 30)
+        menu_input_teks.focus_set()
+        menu_input_teks.pack()
+
+        # Input Key
+        label=Label(menu_dekripsi_1, text="Masukkan kunci: ", font=("Courier 15 bold"))
+        label.pack()
+        # Entry widget untuk input user
+        menu_input_key= Entry(menu_dekripsi_1, width= 20)
+        menu_input_key.focus_set()
+        menu_input_key.pack()
+
+        button = ttk.Button(menu_dekripsi_1, text= "Simpan",width= 20, command = lambda: show_decrypted_text(menu_dekripsi_1, menu_input_teks.get(), menu_input_key.get(), 'extended_vigenere'))
+        button.pack(pady=20)
+
+    else:
+        text = open_file()
+        while (text == ''):
+            print("Jangan di cancel dong :(")
+            text = open_file()
+        menu_dekripsi_2 = Tk()
+        window_setting(menu_dekripsi_2)
+        menu.destroy()
+
+        label=Label(menu_dekripsi_2, text="Masukkan kunci: ", font=("Courier 15 bold"))
+        label.pack()
+        # Entry widget untuk input user
+        menu_input= Entry(menu_dekripsi_2, width= 20)
+        menu_input.focus_set()
+        menu_input.pack()
+
+        button = ttk.Button(menu_dekripsi_2, text= "Simpan",width= 20, command = lambda: show_decrypted_text(menu_dekripsi_2, text, menu_input.get(), 'extended_vigenere'))
         button.pack(pady=20)
 
 # Start
