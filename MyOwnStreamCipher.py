@@ -52,7 +52,11 @@ def KSA(key, cipher):
     if (cipher == '1'):
         key_encrypted = vigenereExtendedEncrypt(teks, key)
     else:
-        key_encrypted = Playfair_Cipher_Encrypt(generate_encryption_key_matrix(key, alphabet_list), teks)
+        key_encrypted = Playfair_Cipher_Encrypt(generate_encryption_key_matrix(key, alphabet_list), group_fill(remove_space(teks)))
+        key_temp = ''
+        for i in range(len(key_encrypted)):
+            key_temp += key_encrypted[i]
+        key_encrypted = key_temp
     index_baru = 0
     # Setelah dienkripsi, kunci yang masih dalam bentuk string diubah menjadi bentuk byte
     key_encrypted = bytearray(key_encrypted, encoding='utf-8')
