@@ -2,27 +2,13 @@
 # Key-Scheduling Algorithm (KSA)
 from playfair_cipher import *
 from Tucil1 import *
-from bitarray import bitarray
+
+import json
+import base64
 
 # Dalam list alfabet ini dibuang huruf 'j' agar terdapat 25 huruf
 alphabet_list = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k', 'l', 'm',
                 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-def Binary_to_Decimal(binary):
-    decimal, i = 0, 0 
-    while(binary != 0):
-        temp = binary % 10
-        decimal = decimal + temp * pow(2, i)
-        binary = binary//10
-        i += 1
-    return (decimal)   
-    
-def Binary_to_String(binary_text):
-    string_text = ''
-    for i in range(0, len(binary_text), 7):
-        temp = int(binary_text[i:i + 7])
-        decimal = Binary_to_Decimal(temp)
-        string_text += chr(decimal)
-    return string_text
 
 def KSA(key, cipher):
     # Inisialisasi array "S"
@@ -111,13 +97,48 @@ def PRGA(S, plainText: bytes):
         keyStream = S[(S[i] + S[j]) % 256]
 
         C.append(keyStream ^ ord(P[k]))
-        
-    return bytes(C)
+    string = ''
+    for i in range(len(C)):
+        Char = chr(C[i])
+        string += Char
+    return string
+
+def dekripsi_RC4(S, plainText):
+    # S = array KSA
+    
+
+    C = []
+
+    # Mengubah byte plaintext menjadi array
+    P = []
+    for i in range (len(plainText)):
+        P.append(ord(plainText[i]))
+    
+    i = 0
+    j = 0
+    for k in range(len(plainText)):   
+        i = (i + 1) % 256
+        j = (j + S[i]) % 256
+
+        # Swap elemen di dalam array
+        S[i], S[j] = S[j], S[i]
+
+        keyStream = S[(S[i] + S[j]) % 256]
+
+        C.append(keyStream ^ P[k])
+    string = ''
+    for i in range(len(C)):
+        Char = chr(C[i])
+        string += Char
+    return string
+
 
 def main(key, base, cipher):
     S = KSA(key, cipher)
+    print(S)
     result = PRGA(S, base)
-    
+    M = KSA(key, cipher)
+    print(dekripsi_RC4(M, result))
     return result
 
 
