@@ -285,7 +285,7 @@ def stream_cipher_dekripsi(menu, input_type):
         menu_input_key.pack()
 
         # Input cipher permutasi KSA stream Cipher
-        label=Label(menu_dekripsi_1, text="Apa jenis cipher yang ingin digunakan untuk permutasi KSA sebelum enkripsi? \n 1. Extended Vigenere Cipher \n 2. Playfair Cipher \n", font=("Courier 15 bold"), wraplength=450)
+        label=Label(menu_dekripsi_1, text="Apa jenis cipher yang ingin digunakan untuk permutasi KSA sebelum dekripsi? \n 1. Extended Vigenere Cipher \n 2. Playfair Cipher \n", font=("Courier 15 bold"), wraplength=450)
         label.pack()
         # Entry widget untuk input user
         menu_input_permutation= Entry(menu_dekripsi_1, width= 30)
@@ -312,7 +312,7 @@ def stream_cipher_dekripsi(menu, input_type):
         menu_input.pack()
 
         # Input cipher permutasi KSA stream Cipher
-        label=Label(menu_dekripsi_2, text="Apa jenis cipher yang ingin digunakan untuk permutasi KSA sebelum enkripsi? \n 1. Extended Vigenere Cipher \n 2. Playfair Cipher \n", font=("Courier 15 bold"), wraplength=450)
+        label=Label(menu_dekripsi_2, text="Apa jenis cipher yang ingin digunakan untuk permutasi KSA sebelum dekripsi? \n 1. Extended Vigenere Cipher \n 2. Playfair Cipher \n", font=("Courier 15 bold"), wraplength=450)
         label.pack()
         # Entry widget untuk input user
         menu_input_permutation= Entry(menu_dekripsi_2, width= 30)
