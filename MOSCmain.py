@@ -50,7 +50,7 @@ def Binary_to_Decimal(binary):
 
 # Fungsi untuk menampilkan cipherteks/plainteks sebagai satu string
 def whole_text_show(menu, text):
-    label=Label(menu, text="Converted Text: " + text, font=("Courier 12 bold"), wraplength= 450)
+    label=Label(menu, text="Converted Text: \n" + text, font=("Courier 12 bold"))
     label.pack(pady=20)
     save_prompt(menu, text)
 
@@ -111,10 +111,10 @@ def save_prompt(menu, text):
     label.pack(pady=20)
 
     button = ttk.Button(menu, text= "Simpan",width= 20, command = lambda: save_text(menu, text))
-    button.pack(pady=20)
+    button.pack(pady=5)
 
     button = ttk.Button(menu, text= "Tidak Simpan",width= 20, command = lambda: start_menu(menu))
-    button.pack(pady=20)
+    button.pack(pady=5)
 
 # Fungsi untuk menapilkan teks dari input pada GUI 
 def show_encrypted_text(menu, text, key, cipher_type, permutation):
@@ -126,25 +126,23 @@ def show_encrypted_text(menu, text, key, cipher_type, permutation):
 
     # Di sini intinya udah harus ada encrypted_text dari setiap jenis cipher
     label=Label(menu, text="Bagimana cipherteks ditampilkan?", font=("Courier 16 bold"), wraplength=450)
-    label.pack(pady=20)
+    label.pack(pady=10)
 
     button = ttk.Button(menu, text= "Tampilkan dalam satu kalimat panjang",width= 50, command = lambda: whole_text_show(menu, encrypted_text))
-    button.pack(pady=20, padx= 20)
+    button.pack(pady=5, padx= 20)
 
 def show_decrypted_text(menu, text, key, cipher_type):
-    if (cipher_type == 'stream'):
-        decrypted_text_array = dekripsi_RC4(key, text)
-        decrypted_text = ''
-        for i in range(len(decrypted_text_array)):
-            decrypted_text += decrypted_text_array[i]
-    
+    decrypted_text_array = dekripsi_RC4(KSA(key, cipher_type), text)
+    decrypted_text = ''
+    for i in range(len(decrypted_text_array)):
+        decrypted_text += decrypted_text_array[i]
 
     # Di sini intinya udah harus ada decrypted_text dari setiap jenis cipher
     label=Label(menu, text="Bagimana plainteks ditampilkan?", font=("Courier 16 bold"), wraplength=450)
-    label.pack(pady=20)
+    label.pack(pady=10)
 
     button = ttk.Button(menu, text= "Tampilkan dalam satu kalimat panjang",width= 50, command = lambda: whole_text_show(menu, decrypted_text))
-    button.pack(pady=20, padx= 20)
+    button.pack(pady=5, padx= 20)
 
 # Fungsi yang memunculkan window baru untuk Stream Cipher
 def stream_cipher_window_start(menu):
@@ -225,7 +223,7 @@ def stream_cipher_enkripsi(menu, input_type):
         menu_input_key.pack()
 
         # Input cipher permutasi KSA stream Cipher
-        label=Label(menu_enkripsi_1, text="Apa jenis cipher yang ingin digunakan untuk permutasi KSA sebelum enkripsi? \n 1. Extended Vigenere Cipher \n 2. Playfair Cipher \n", font=("Courier 15 bold"))
+        label=Label(menu_enkripsi_1, text="Apa jenis cipher yang ingin digunakan untuk permutasi KSA sebelum enkripsi? \n 1. Extended Vigenere Cipher \n 2. Playfair Cipher \n", font=("Courier 15 bold"), wraplength=450)
         label.pack()
         # Entry widget untuk input user
         menu_input_permutation= Entry(menu_enkripsi_1, width= 20)
@@ -253,7 +251,7 @@ def stream_cipher_enkripsi(menu, input_type):
         menu_input.pack()
 
         # Input cipher permutasi KSA stream Cipher
-        label=Label(menu_enkripsi_2, text="Apa jenis cipher yang ingin digunakan untuk permutasi KSA sebelum enkripsi? \n 1. Extended Vigenere Cipher \n 2. Playfair Cipher \n", font=("Courier 15 bold"))
+        label=Label(menu_enkripsi_2, text="Apa jenis cipher yang ingin digunakan untuk permutasi KSA sebelum enkripsi? \n 1. Extended Vigenere Cipher \n 2. Playfair Cipher \n", font=("Courier 15 bold"), wraplength=450)
         label.pack()
         # Entry widget untuk input user
         menu_input_permutation= Entry(menu_enkripsi_2, width= 30)
@@ -286,7 +284,15 @@ def stream_cipher_dekripsi(menu, input_type):
         menu_input_key.focus_set()
         menu_input_key.pack()
 
-        button = ttk.Button(menu_dekripsi_1, text= "Simpan",width= 20, command = lambda: show_decrypted_text(menu_dekripsi_1, menu_input_teks.get(), menu_input_key.get(), 'stream'))
+        # Input cipher permutasi KSA stream Cipher
+        label=Label(menu_dekripsi_1, text="Apa jenis cipher yang ingin digunakan untuk permutasi KSA sebelum enkripsi? \n 1. Extended Vigenere Cipher \n 2. Playfair Cipher \n", font=("Courier 15 bold"), wraplength=450)
+        label.pack()
+        # Entry widget untuk input user
+        menu_input_permutation= Entry(menu_dekripsi_1, width= 30)
+        menu_input_permutation.focus_set()
+        menu_input_permutation.pack()
+
+        button = ttk.Button(menu_dekripsi_1, text= "Simpan",width= 20, command = lambda: show_decrypted_text(menu_dekripsi_1, menu_input_teks.get(), menu_input_key.get(), menu_input_permutation.get()))
         button.pack(pady=20)
 
     else:
@@ -305,7 +311,15 @@ def stream_cipher_dekripsi(menu, input_type):
         menu_input.focus_set()
         menu_input.pack()
 
-        button = ttk.Button(menu_dekripsi_2, text= "Simpan",width= 20, command = lambda: show_decrypted_text(menu_dekripsi_2, text, menu_input.get(), 'stream'))
+        # Input cipher permutasi KSA stream Cipher
+        label=Label(menu_dekripsi_2, text="Apa jenis cipher yang ingin digunakan untuk permutasi KSA sebelum enkripsi? \n 1. Extended Vigenere Cipher \n 2. Playfair Cipher \n", font=("Courier 15 bold"), wraplength=450)
+        label.pack()
+        # Entry widget untuk input user
+        menu_input_permutation= Entry(menu_dekripsi_2, width= 30)
+        menu_input_permutation.focus_set()
+        menu_input_permutation.pack()
+
+        button = ttk.Button(menu_dekripsi_2, text= "Simpan",width= 20, command = lambda: show_decrypted_text(menu_dekripsi_2, text, menu_input.get(), menu_input_permutation.get()))
         button.pack(pady=20)
 
 # Start
