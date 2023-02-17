@@ -8,7 +8,6 @@ from otp import *
 from Tucil1 import *
 from MyOwnStreamCipher import *
 import json
-import base64
 
 # Fungsi untuk start main menu
 def start_menu(menu_awal):
@@ -100,10 +99,10 @@ def check_input(menu, input, cipher_type):
         
 # Menyimpan hasil ciphertext ke dalam file data.txt
 def save_text(menu, encrypted_text):
-    text_file = open("./Data.txt", "w", encoding="utf-8")
-    text_file.write(encrypted_text)
-    text_file.close()
-    messagebox.showinfo(title="Saved", message="Hasil berhasil disimpan dalam Data.txt")
+    file = open("./Data.txt", "w", encoding="utf-8")
+    file.write(encrypted_text)
+    file.close()
+    messagebox.showinfo(title="Saved", message="Hasil berhasil disimpan.")
     start_menu(menu)
 
 # Fungsi yang menampilkan opsi untku simpan teks dalam file eksternal
@@ -118,9 +117,9 @@ def save_prompt(menu, text):
     button.pack(pady=20)
 
 # Fungsi untuk menapilkan teks dari input pada GUI 
-def show_encrypted_text(menu, text, key, cipher_type, permutatation):
+def show_encrypted_text(menu, text, key, cipher_type, permutation):
     if (cipher_type == 'stream'):
-        encrypted_text_array = enkripsi_RC4(key, text, permutatation)
+        encrypted_text_array = enkripsi_RC4(key, text, permutation)
         encrypted_text = ''
         for i in range(len(encrypted_text_array)):
             encrypted_text += encrypted_text_array[i]
@@ -257,7 +256,7 @@ def stream_cipher_enkripsi(menu, input_type):
         label=Label(menu_enkripsi_2, text="Apa jenis cipher yang ingin digunakan untuk permutasi KSA sebelum enkripsi? \n 1. Extended Vigenere Cipher \n 2. Playfair Cipher \n", font=("Courier 15 bold"))
         label.pack()
         # Entry widget untuk input user
-        menu_input_permutation= Entry(menu_enkripsi_1, width= 30)
+        menu_input_permutation= Entry(menu_enkripsi_2, width= 30)
         menu_input_permutation.focus_set()
         menu_input_permutation.pack()
 
