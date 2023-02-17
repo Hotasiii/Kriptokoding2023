@@ -35,6 +35,7 @@ def KSA(key, cipher):
     # Permutasi kedua nilai-nilai dalam array "S" dengan kunci "key" yang telah dienkripsi
     # Plainteks digantikan dengan string tetap 'kriptografi'
     teks = "kriptografi"
+    key_encrypted = key # Jaga-jaga user tidak memasukkan jenis cipher, key encrypted akan sama seperti nilai key awal
     if (cipher == '1'):
         key_encrypted = vigenereExtendedEncrypt(teks, key)
     else:

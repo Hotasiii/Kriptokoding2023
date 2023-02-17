@@ -61,8 +61,13 @@ def open_file():
     if (file_path == ''):
         return ''
     else:
+        if (file_path[-3:] == 'txt'):
+            file = open(file_path,'r', encoding="utf-8")
+            text = file.read()
+            file.close()
+            return text
         # Jika file yang disubmit adalah file biner
-        if (file_path[-3:] == 'bin'):
+        else:
             file = open(file_path,'r', encoding="utf-8")
             bin_text = file.read()
             file.close()
@@ -73,11 +78,6 @@ def open_file():
                 decimal = Binary_to_Decimal(temp)
                 string_text += chr(decimal)
             return string_text
-        else:
-            file = open(file_path,'r', encoding="utf-8")
-            text = file.read()
-            file.close()
-            return text
 
 # Check input dari user, keluarkan alert message box jika input tidak valid
 def check_input(menu, input, cipher_type):
