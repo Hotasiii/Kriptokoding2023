@@ -132,23 +132,29 @@ def dekripsi_RC4(S, plainText):
         string += Char
     return string
 
-
-def main(key, base, cipher):
+def enkripsi_RC4(key, base, cipher):
     S = KSA(key, cipher)
-    print(S)
     result = PRGA(S, base)
-    M = KSA(key, cipher)
-    print(dekripsi_RC4(M, result))
     return result
 
 
-plainteks = input("Masukkan plainteks: ")
-key = input("Masukkkan kunci rahasia: ")
-print("1. Extended Vigenere Cipher")
-print("2. Playfair Cipher")
-cipher = input("Masukkan jenis cipher yang ingin digunakan: ")
-while (cipher != '1' and cipher != '2'):
-    print("Masukkan input yang valid!")
-    cipher = input("Masukkan jenis cipher yang ingin digunakan: ")
-print(main(key, plainteks, cipher))
+# def main(key, base, cipher):
+#     S = KSA(key, cipher)
+#     print(S)
+#     result = PRGA(S, base)
+
+    # M = KSA(key, cipher)
+    # print(dekripsi_RC4(M, result))
+    # return result
+
+
+# plainteks = input("Masukkan plainteks: ")
+# key = input("Masukkkan kunci rahasia: ")
+# print("1. Extended Vigenere Cipher")
+# print("2. Playfair Cipher")
+# cipher = input("Masukkan jenis cipher yang ingin digunakan: ")
+# while (cipher != '1' and cipher != '2'):
+#     print("Masukkan input yang valid!")
+#     cipher = input("Masukkan jenis cipher yang ingin digunakan: ")
+# print(main(key, plainteks, cipher))
 
